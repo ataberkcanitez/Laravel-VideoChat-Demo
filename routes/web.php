@@ -20,3 +20,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::group(['middleware' => 'auth'], function(){
+   Route::get('vide_chat', 'VideoChatController@index');
+   Route::get('auth/video_chat', 'VideoChatController@auth');
+});
