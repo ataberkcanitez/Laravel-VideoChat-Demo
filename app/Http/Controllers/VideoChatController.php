@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Pusher\Pusher;
 
 class VideoChatController extends Controller
 {
-    public function index(Request $request){
-        $user = $request->userr();
-        $others = \App\User::where('id','!=', $user->id)->pluck('name','id');
-
-
-        return view('video_chat.index')->with(['user' => collect($request->user()->only(['id','name'])), 'others' => $others]);
+    public function index(Request $request) {
+        $user = $request->user();
+        $others = User::where('id', '!=', $user->id)->pluck('name', 'id');
+        return view('video_chat.index')->with([
+            'user' => collect($request->user()->only(['id', 'name'])),
+            'others' => $others
+        ]);
     }
 
-    public function auth(Request $request){
+    public function auth(Request $request) {
         $user = $request->user();
         $socket_id = $request->socket_id;
         $channel_name = $request->channel_name;
@@ -27,8 +30,9 @@ class VideoChatController extends Controller
                 'encrypted' => true
             ]
         );
-
-        return response($pusher->presence_auth($channel_name, $socket_id, $user->id));
+        return response(
+            $pusher->presence_auth($channel_name, $socket_id, $user->id)
+        );
     }
 
 
