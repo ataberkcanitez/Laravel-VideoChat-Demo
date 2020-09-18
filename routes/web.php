@@ -14,7 +14,7 @@ use App\Http\Controllers\VideoChatController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('onboard');
 });
 
 Auth::routes();
